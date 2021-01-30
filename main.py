@@ -1,17 +1,14 @@
-import pickle
-# w=read, b=binary
-with open("my_ml_model1.ml", 'rb') as f:
-classifier = pickle.load(f)
+import requests
+import pandas as pd
+url ="https://data.gov.sg/api/action/datastore_search?resource_id=f9dbfc75-a2dc-42af-9f50-425e4107ae84&q=2019"
+result = requests.get(url).json()
+# Try out the following codes
+# Try to understand the result and figure out how is the data stored in json
+print(result.keys()) #level_1
+print(result['result'].keys)
+print(result['result']['records'])
 
-while True:
-    var1 = float(input("Enter value for account length:"))
-    var2 = float(input("Enter value for number vmail messages:"))
-    pred = classifier.predict([[var1, var2]])
-    print(pred)
-    if pred == [1]:
-        print("Yes, likely will churn.")
-    else:
-        print("Unlikely will churn.")
-    cont = input("Do you want to continue? y/n")
-    if cont == "n":
-        break
+df = pd.DataFrame(result['result']['records'])
+print(df.level_2)
+
+print(df[df.level_1=='Total Residents'])
